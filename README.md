@@ -8,14 +8,19 @@ By performing additional data cleaning, handling missing values, and aligning da
 
 
 ### **E Part – Use Shanghai Jiading–Nanxiang AQ Data**
-In the `aq-backfill` pipeline, we select **Jiading–Nanxiang** (`jiading-nanxiang`) as the default AQ monitoring station.
 
-Key improvements include:
+We use the **Shanghai Jiading–Nanxiang** station as the data source because its AQ readings are stable and complete.
 
-- Fetching only this station’s PM2.5, PM10, AQI, and related indicators  
-- Basic cleaning after download (duplicate removal, outlier filtering)  
-- Generating a complete continuous date range to ensure daily records  
-- Automatically filling missing dates (values will be handled in the features pipeline)
+**Data flow:**
+1. Download Jiading–Nanxiang AQ data → clean → ensure continuous daily dates.  
+2. Download weather data → align dates → use weather features as **X_train**.  
+3. Use PM2.5 from Jiading–Nanxiang as **y_label**.  
+4. Register the cleaned features in **Hopsworks Feature Store**.  
+5. Train **XGBoost** and **Decision Tree** models using these registered features.  
+6. Register the trained models in **Hopsworks Model Registry**.  
+7. Configure a Hopsworks **Action** to trigger inference when new weather data arrives.  
+8. Display predictions and trends on a **Hopsworks Page dashboard**.
+
 
 ---
 
