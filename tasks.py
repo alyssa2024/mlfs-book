@@ -34,7 +34,7 @@ def install(c):
 @task
 def aq_clean(c):
     check_venv()
-    c.run("uv run python mlfs/clean_hopsworks_resources.py aq")
+    c.run(" run python mlfs/clean_hopsworks_resources.py aq")
 
 @task
 def aq_backfill(c):
