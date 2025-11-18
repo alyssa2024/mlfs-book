@@ -23,31 +23,28 @@ We use the **Shanghai Jiading–Nanxiang** station as the data source because it
 
 ---
 
-### **C Part – Add Weather Feature Engineering**
-Weather feature processing is extended with additional derived features.
+### **C Part – Add Weather Feature and Incremental Inference Engineering**
+Weather feature processing is extended with additional derived features, and the inference workflow has fundamentally shifted from a batch processing mode to an **incremental** approach. 
 
-#### 1. **New: 3-day rolling mean features**
-Added in `aq-features`:
+#### 1. **Historical Weather Feature Augmentation**
+Added in `weather-features` derived from historical air quality data:
 
 - `pm25_3day_mean`: 3-day mean pm25   
 
 Implementation details:
 
-- Sort weather data by date  
-- Use `rolling(3).mean()` to compute the 3-day moving averages  
-- Merge with AQ data on the date column  
+- Forward fill (FFill) for cases where consecutive values are missing   
+- Use `rolling(window=3, min_periods=1).mean().shift(1)` to compute the 3-day moving averages  
+- Merge with original weather feature based on the date column  
 
-#### 2. **Missing value handling**
-To avoid high missing-value ratios during training, we apply:
-- Backward fill (BFill) for cases where consecutive values are missing  
+#### 2. **Daily Updated New Features**
+Since the original feature(weather) and air quality(label) will update daily, the new added feature will also update daily by:
+- Fetch the historical air quality data covering the **seven days preceding today** (T-7 to T-1).
+- Same implementation as in 1
 
-#### 3. **Date alignment across datasets**
-Because AQ and weather datasets may have different date coverage:
-
-- A unified daily date index is created  
-- A full outer join aligns AQ and weather data  
-- Missing values are filled afterward  
-
+#### 3. **Incremental Inference**
+To predict the air quality for the next seven days, a chained inference is employed:
+- the new predctions are used to calculate the new `pm25_3day_mean` feature for the next day.
 
 ---
 
