@@ -39,8 +39,6 @@ Implementation details:
 
 #### 2. **Missing value handling**
 To avoid high missing-value ratios during training, we apply:
-
-- Forward fill (FFill) for gaps  
 - Backward fill (BFill) for cases where consecutive values are missing  
 
 #### 3. **Date alignment across datasets**
@@ -49,7 +47,7 @@ Because AQ and weather datasets may have different date coverage:
 - A unified daily date index is created  
 - A full outer join aligns AQ and weather data  
 - Missing values are filled afterward  
-- Ensures the final `features.parquet` is **fully continuous, daily, and complete**
+
 
 ---
 
