@@ -12,14 +12,13 @@ By performing additional data cleaning, handling missing values, and aligning da
 We use the **Shanghai Jiading–Nanxiang** station as the data source because its AQ readings are stable and complete.
 
 **Data flow:**
-1. Download Jiading–Nanxiang AQ data → clean → ensure continuous daily dates.  
-2. Download weather data → align dates → use weather features as **X_train**.  
-3. Use PM2.5 from Jiading–Nanxiang as **y_label**.  
+1. Download Jiading–Nanxiang AQ data.Use PM2.5 from Jiading–Nanxiang as **y_label**.  
+2. Download weather data,use weather features as **X_train**.  
 4. Register the cleaned features in **Hopsworks Feature Store**.  
-5. Train **XGBoost** and **Decision Tree** models using these registered features.  
+5. Train **XGBoost** models using these registered features.  
 6. Register the trained models in **Hopsworks Model Registry**.  
-7. Configure a Hopsworks **Action** to trigger inference when new weather data arrives.  
-8. Display predictions and trends on a **Hopsworks Page dashboard**.
+7. Configure a github **Action** to trigger inference when new weather data arrives.  
+8. Display predictions and trends on a **github Page dashboard**.
 
 
 ---
